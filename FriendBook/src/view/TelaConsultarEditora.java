@@ -27,21 +27,17 @@ public class TelaConsultarEditora extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField inputPesquisar;
-	private JLabel labelPesquisar;
-	private JTable tableConsultaModel;
 	private JCheckBox checkboxStatus;
-	private JButton buttonPesquisar;
-	private JButton buttonVoltar;
-	private JButton buttonCadastrar;
-	private JButton buttonEditar;
-	private JButton btnAlterarStatus;
 
 	private JScrollPane tableConsulta;
+	private JTable tableConsultaModel;
 	private TelaEditarEditora telaEditarEditora = new TelaEditarEditora(this);
 
 	public TelaConsultarEditora() {
+		setMaximumSize(new Dimension(900, 680));
+		setMinimumSize(new Dimension(900, 680));
+		getContentPane().setBackground(new Color(31, 31, 31));
 		setResizable(false);
-		setSize(new Dimension(820, 640));
 		initComponents();
 	}
 
@@ -57,195 +53,184 @@ public class TelaConsultarEditora extends javax.swing.JFrame {
 		setTitle("Editoras");
 
 		// Componentes da tela
-		labelPesquisar = new javax.swing.JLabel("Informe o nome da Editora");
+				 JLabel labelPesquisar = new javax.swing.JLabel("Informe o nome do Autor");
+				 labelPesquisar.setForeground(new Color(255, 255, 255));
+				 labelPesquisar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
-		inputPesquisar = new javax.swing.JTextField();
-		inputPesquisar.setDropMode(DropMode.INSERT);
-		
-		checkboxStatus = new JCheckBox("Ativo");
-		checkboxStatus.setSelected(true);
+				inputPesquisar = new javax.swing.JTextField();
+				inputPesquisar.setDropMode(DropMode.INSERT);
+				inputPesquisar.setBorder(null);
+				inputPesquisar.setForeground(new Color(255, 255, 255));
+				inputPesquisar.setBackground(new Color(91, 91, 91));
+				inputPesquisar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				inputPesquisar.setPreferredSize(new Dimension(inputPesquisar.getPreferredSize().width, 26));
+				inputPesquisar.setBorder(BorderFactory.createCompoundBorder(
+					    inputPesquisar.getBorder(),
+					    BorderFactory.createEmptyBorder(0, 8, 0, 8)
+					));
 
-		// Botões e eventos
-		buttonPesquisar = new javax.swing.JButton("Pesquisar");
-		buttonPesquisar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				consultarEditora();
-			}
-		});
-		buttonPesquisar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				consultarEditora();
-			}
-		});
+				checkboxStatus = new JCheckBox("Ativo");
+				checkboxStatus.setForeground(new Color(255, 255, 255));
+				checkboxStatus.setBackground(new Color(31, 31, 31));
+				checkboxStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				checkboxStatus.setSelected(true);
 
-		buttonVoltar = new JButton("Voltar");
-		buttonVoltar.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					// Volta para a tela anterior
-				}
-			}
-		});
-		buttonVoltar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// Volta para a tela anterior
-			}
-		});
-
-		buttonCadastrar = new JButton("Cadastrar");
-		buttonCadastrar.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE)
-					cadastrarRegistro();
-			}
-		});
-		buttonCadastrar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				cadastrarRegistro();
-			}
-		});
-
-		buttonEditar = new JButton("Editar");
-		buttonEditar.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE)
-					editarRegistro();
-			}
-		});
-		buttonEditar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				editarRegistro();
-			}
-		});
-
-		btnAlterarStatus = new JButton("Alterar Status");
-		btnAlterarStatus.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE)
-					alterarStatusRegistro();
-			}
-		});
-		btnAlterarStatus.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				alterarStatusRegistro();
-			}
-		});
-
-		// Componentes e configuração da Tabela
-		tableConsulta = new javax.swing.JScrollPane();
-
-		tableConsultaModel = new javax.swing.JTable();
-		tableConsultaModel.setModel(
-				new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "Status" }) {
-
-					private static final long serialVersionUID = 1L;
-					Class<?>[] types = new Class[] { java.lang.Integer.class, java.lang.String.class,
-							java.lang.Boolean.class };
-					boolean[] canEdit = new boolean[] { false, false, false };
-
-					public Class<?> getColumnClass(int columnIndex) {
-						return types[columnIndex];
-					}
-
-					public boolean isCellEditable(int rowIndex, int columnIndex) {
-						return canEdit[columnIndex];
+				// Botões e eventos
+				JButton buttonPesquisar = new javax.swing.JButton("Pesquisar");
+				buttonPesquisar.setForeground(new Color(255, 255, 255));
+				buttonPesquisar.setBackground(new Color(31, 31, 31));		
+				buttonPesquisar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+				buttonPesquisar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						consultarEditora();
 					}
 				});
-		
-		tableConsultaModel.getTableHeader().setReorderingAllowed(false);
-		
-		tableConsulta.setViewportView(tableConsultaModel);
-		if (tableConsultaModel.getColumnModel().getColumnCount() > 0) {
-			tableConsultaModel.getColumnModel().getColumn(2).setResizable(false);
-			tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(15);
-		}
+				
+				JButton buttonVoltar = new JButton("Voltar");
+				buttonVoltar.setForeground(new Color(255, 255, 255));
+				buttonVoltar.setBackground(new Color(31, 31, 31));		
+				buttonVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+				buttonVoltar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
 
-		DefaultCellEditor checkBoxEditor = new DefaultCellEditor(new JCheckBox());
-		tableConsultaModel.getColumnModel().getColumn(2).setCellEditor(checkBoxEditor);
+				JButton buttonCadastrar = new JButton("Cadastrar");
+				buttonCadastrar.setForeground(new Color(255, 255, 255));
+				buttonCadastrar.setBackground(new Color(31, 31, 31));		
+				buttonCadastrar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+				buttonCadastrar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						cadastrarRegistro();
+					}
+				});
 
-		((DefaultTableCellRenderer) tableConsultaModel.getTableHeader().getDefaultRenderer())
-				.setHorizontalAlignment(SwingConstants.CENTER);
+				JButton buttonEditar = new JButton("Editar");
+				buttonEditar.setForeground(new Color(255, 255, 255));
+				buttonEditar.setBackground(new Color(31, 31, 31));		
+				buttonEditar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+				buttonEditar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						editarRegistro();
+					}
+				});
 
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+				JButton btnAlterarStatus = new JButton("Alterar Status");
+				btnAlterarStatus.setForeground(new Color(255, 255, 255));
+				btnAlterarStatus.setBackground(new Color(31, 31, 31));		
+				btnAlterarStatus.setFont(new Font("Segoe UI", Font.BOLD, 12));
+				btnAlterarStatus.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						alterarStatusRegistro();
+					}
+				});
 
-		for (int i = 0; i < tableConsultaModel.getColumnModel().getColumnCount(); i++) {
-			if (i == 2) {
-				tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
-					private static final long serialVersionUID = 1L;
+				// Componentes e configuração da Tabela
+				tableConsulta = new javax.swing.JScrollPane();
+				tableConsulta.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
-					@Override
-					public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-							boolean hasFocus, int row, int column) {
-						if (value instanceof Boolean) {
-							JCheckBox checkBox = new JCheckBox();
-							checkBox.setSelected((Boolean) value);
-							checkBox.setHorizontalAlignment(SwingConstants.CENTER);
-							return checkBox;
+				tableConsultaModel = new javax.swing.JTable();
+				tableConsultaModel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+				tableConsultaModel.setForeground(new Color(0, 0, 0));
+				tableConsultaModel.setModel(
+						new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "Status" }) {
+							private static final long serialVersionUID = 1L;
+							Class<?>[] types = new Class[] { java.lang.Integer.class, java.lang.String.class,
+									java.lang.Boolean.class };
+							boolean[] canEdit = new boolean[] { false, false, false };
+
+							public Class<?> getColumnClass(int columnIndex) {
+								return types[columnIndex];
+							}
+
+							public boolean isCellEditable(int rowIndex, int columnIndex) {
+								return canEdit[columnIndex];
+							}
+						});
+				
+				tableConsultaModel.getTableHeader().setReorderingAllowed(false);
+
+				tableConsulta.setViewportView(tableConsultaModel);
+				if (tableConsultaModel.getColumnModel().getColumnCount() > 0) {
+					tableConsultaModel.getColumnModel().getColumn(2).setResizable(false);
+					tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(15);
+				}
+
+				DefaultCellEditor checkBoxEditor = new DefaultCellEditor(new JCheckBox());
+				tableConsultaModel.getColumnModel().getColumn(2).setCellEditor(checkBoxEditor);
+
+				((DefaultTableCellRenderer) tableConsultaModel.getTableHeader().getDefaultRenderer())
+						.setHorizontalAlignment(SwingConstants.CENTER);
+
+				DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+				centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+				for (int i = 0; i < tableConsultaModel.getColumnModel().getColumnCount(); i++) {
+					if (i == 2) {
+						tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+									boolean hasFocus, int row, int column) {
+								if (value instanceof Boolean) {
+									JCheckBox checkBox = new JCheckBox();
+									checkBox.setSelected((Boolean) value);
+									checkBox.setHorizontalAlignment(SwingConstants.CENTER);
+									return checkBox;
+								}
+								return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+							}
+						});
+					} else {
+						if (i != 1) {
+							tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 						}
-						return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 					}
-				});
-			} else {
-				if (i != 1) { // Exceto a coluna "Nome"
-					tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 				}
-			}
-		}
 
-		int novaAlturaDaLinha = tableConsultaModel.getRowHeight() + 2;
-		tableConsultaModel.setRowHeight(novaAlturaDaLinha);
+				int novaAlturaDaLinha = tableConsultaModel.getRowHeight() + 2;
+				tableConsultaModel.setRowHeight(novaAlturaDaLinha);
 
-		tableConsultaModel.getColumnModel().getColumn(0).setMinWidth(26);
-		tableConsultaModel.getColumnModel().getColumn(0).setMaxWidth(26);
-		tableConsultaModel.getColumnModel().getColumn(0).setPreferredWidth(26);
+				tableConsultaModel.getColumnModel().getColumn(0).setMinWidth(26);
+				tableConsultaModel.getColumnModel().getColumn(0).setMaxWidth(26);
+				tableConsultaModel.getColumnModel().getColumn(0).setPreferredWidth(26);
 
-		tableConsultaModel.getColumnModel().getColumn(2).setMinWidth(50);
-		tableConsultaModel.getColumnModel().getColumn(2).setMaxWidth(50);
-		tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(50);
+				tableConsultaModel.getColumnModel().getColumn(2).setMinWidth(50);
+				tableConsultaModel.getColumnModel().getColumn(2).setMaxWidth(50);
+				tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-		tableConsultaModel.setShowGrid(true);
-		tableConsultaModel.setGridColor(Color.LIGHT_GRAY);
+				tableConsultaModel.setShowGrid(true);
+				tableConsultaModel.setGridColor(Color.LIGHT_GRAY);
+				
+				
 
-		// Layout da tela
+				// Layout da tela
 				javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 				layout.setHorizontalGroup(
-					layout.createParallelGroup(Alignment.LEADING)
+					layout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(layout.createSequentialGroup()
-							.addGap(36)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
-									.addComponent(buttonVoltar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-									.addGap(266)
-									.addComponent(buttonCadastrar, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(buttonEditar, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnAlterarStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGroup(layout.createSequentialGroup()
+							.addGap(41)
+							.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(tableConsulta, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 802, Short.MAX_VALUE)
+								.addGroup(Alignment.LEADING, layout.createSequentialGroup()
 									.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addComponent(tableConsulta, GroupLayout.PREFERRED_SIZE, 624, GroupLayout.PREFERRED_SIZE)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-											.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-												.addComponent(labelPesquisar)
-												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(checkboxStatus))
-											.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-												.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, 526, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(buttonPesquisar))))
-									.addPreferredGap(ComponentPlacement.RELATED)))
-							.addGap(46))
+										.addComponent(labelPesquisar)
+										.addComponent(inputPesquisar, GroupLayout.DEFAULT_SIZE, 707, Short.MAX_VALUE))
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(buttonPesquisar)
+										.addComponent(checkboxStatus)))
+								.addGroup(Alignment.LEADING, layout.createSequentialGroup()
+									.addComponent(buttonVoltar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addGap(420)
+									.addComponent(buttonCadastrar, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(buttonEditar, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnAlterarStatus)))
+							.addGap(41))
 				);
 				layout.setVerticalGroup(
 					layout.createParallelGroup(Alignment.LEADING)
@@ -259,14 +244,14 @@ public class TelaConsultarEditora extends javax.swing.JFrame {
 								.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonPesquisar))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(tableConsulta, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(11)
+							.addComponent(tableConsulta, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+							.addGap(18)
 							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(buttonVoltar)
 								.addComponent(btnAlterarStatus)
 								.addComponent(buttonEditar)
 								.addComponent(buttonCadastrar))
-							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(24))
 				);
 				getContentPane().setLayout(layout);
 
@@ -348,34 +333,5 @@ public class TelaConsultarEditora extends javax.swing.JFrame {
 				}
 			}
 		}
-	}
-
-	public static void main(String args[]) {
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(TelaConsultarEditora.class.getName()).log(java.util.logging.Level.SEVERE,
-					null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(TelaConsultarEditora.class.getName()).log(java.util.logging.Level.SEVERE,
-					null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(TelaConsultarEditora.class.getName()).log(java.util.logging.Level.SEVERE,
-					null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(TelaConsultarEditora.class.getName()).log(java.util.logging.Level.SEVERE,
-					null, ex);
-		}
-
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new TelaConsultarEditora().setVisible(true);
-			}
-		});
 	}
 }
