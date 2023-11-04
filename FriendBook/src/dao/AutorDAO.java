@@ -43,8 +43,12 @@ public class AutorDAO {
 		}
 	}
 
-	public ArrayList<Autor> listarAutores(String pesquisa) throws ExceptionDAO {
-		String sql = "SELECT * FROM autor WHERE nome like '%" + pesquisa + "%' ORDER BY id";
+	public ArrayList<Autor> listarAutores(String pesquisa, boolean status) throws ExceptionDAO {
+		String sql = "SELECT * FROM autor WHERE nome like '%" + pesquisa + "%' AND status = true ORDER BY id";
+
+		if (!status) {
+			sql = "SELECT * FROM autor WHERE nome like '%" + pesquisa + "%' ORDER BY id";			
+		}
 
 		connection = null;
 		pStatement = null;

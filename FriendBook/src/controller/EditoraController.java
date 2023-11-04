@@ -20,8 +20,8 @@ public class EditoraController {
 		return false;
 	}
 
-	public ArrayList<Editora> consultarEditoras(String pesquisa) throws ExceptionDAO {
-		return new Editora().consultar(pesquisa);
+	public ArrayList<Editora> consultarEditoras(String pesquisa, boolean status) throws ExceptionDAO {
+		return new Editora().consultar(pesquisa, status);
 	}
 
 	public boolean alterarEditora(Integer id, String nome, boolean status) throws ExceptionDAO {

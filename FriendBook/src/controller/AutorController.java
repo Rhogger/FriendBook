@@ -20,8 +20,8 @@ public class AutorController {
 		return false;
 	}
 
-	public ArrayList<Autor> consultarAutores(String pesquisa) throws ExceptionDAO {
-		return new Autor().consultar(pesquisa);
+	public ArrayList<Autor> consultarAutores(String pesquisa, boolean status) throws ExceptionDAO {
+		return new Autor().consultar(pesquisa, status);
 	}
 
 	public boolean alterarAutor(Integer id, String nome, boolean status) throws ExceptionDAO {

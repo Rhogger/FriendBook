@@ -43,8 +43,12 @@ public class EditoraDAO {
 		}
 	}
 
-	public ArrayList<Editora> listarEditoras(String pesquisa) throws ExceptionDAO {
-		String sql = "SELECT * FROM editora WHERE nome like '%" + pesquisa + "%' ORDER BY id";
+	public ArrayList<Editora> listarEditoras(String pesquisa, boolean status) throws ExceptionDAO {
+		String sql = "SELECT * FROM editora WHERE nome like '%" + pesquisa + "%' AND status = true ORDER BY id";
+		
+		if (!status) {
+			sql = "SELECT * FROM editora WHERE nome like '%" + pesquisa + "%' ORDER BY id";
+		}
 
 		connection = null;
 		pStatement = null;

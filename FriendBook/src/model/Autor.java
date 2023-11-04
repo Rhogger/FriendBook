@@ -61,8 +61,8 @@ public class Autor {
 		new AutorDAO().cadastrarAutor(autor);
 	}
 
-	public ArrayList<Autor> consultar(String pesquisa) throws ExceptionDAO {
-		return new AutorDAO().listarAutores(pesquisa);
+	public ArrayList<Autor> consultar(String pesquisa, boolean status) throws ExceptionDAO {
+		return new AutorDAO().listarAutores(pesquisa, status);
 	}
 
 	public void editar(Autor autor) throws ExceptionDAO {

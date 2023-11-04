@@ -2,6 +2,7 @@ package view;
 
 import model.Editora;
 import dao.ExceptionDAO;
+import controller.AutorController;
 import controller.EditoraController;
 
 import java.util.ArrayList;
@@ -25,11 +26,17 @@ import java.awt.event.*;
 public class TelaConsultarEditora extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private javax.swing.JTextField inputPesquisar;
-	private javax.swing.JLabel labelPesquisar;
-	private javax.swing.JTable headerTableConsulta;
-	private javax.swing.JButton buttonPesquisar;
-	private javax.swing.JScrollPane tableConsulta;
+	private JTextField inputPesquisar;
+	private JLabel labelPesquisar;
+	private JTable tableConsultaModel;
+	private JCheckBox checkboxStatus;
+	private JButton buttonPesquisar;
+	private JButton buttonVoltar;
+	private JButton buttonCadastrar;
+	private JButton buttonEditar;
+	private JButton btnAlterarStatus;
+
+	private JScrollPane tableConsulta;
 	private TelaEditarEditora telaEditarEditora = new TelaEditarEditora(this);
 
 	public TelaConsultarEditora() {
@@ -45,69 +52,136 @@ public class TelaConsultarEditora extends javax.swing.JFrame {
 
 	private void initComponents() {
 
-		labelPesquisar = new javax.swing.JLabel();
-		labelPesquisar.setText("Informe o nome da Editora");
+		// Propriedades da tela
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		setTitle("Editoras");
+
+		// Componentes da tela
+		labelPesquisar = new javax.swing.JLabel("Informe o nome da Editora");
+
 		inputPesquisar = new javax.swing.JTextField();
 		inputPesquisar.setDropMode(DropMode.INSERT);
-		buttonPesquisar = new javax.swing.JButton();
-		buttonPesquisar.setText("Pesquisar");
+		
+		checkboxStatus = new JCheckBox("Ativo");
+		checkboxStatus.setSelected(true);
+
+		// Botões e eventos
+		buttonPesquisar = new javax.swing.JButton("Pesquisar");
 		buttonPesquisar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				consultarEditora();
 			}
 		});
-		tableConsulta = new javax.swing.JScrollPane();
-		headerTableConsulta = new javax.swing.JTable();
-
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("Editoras");
-
-		headerTableConsulta.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
-
-		}, new String[] { "ID", "Nome", "Status" }) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class[] { java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class };
-			boolean[] canEdit = new boolean[] { false, false, false };
-
-			public Class<?> getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
-
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return canEdit[columnIndex];
+		buttonPesquisar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				consultarEditora();
 			}
 		});
-		headerTableConsulta.getTableHeader().setReorderingAllowed(false);
-		tableConsulta.setViewportView(headerTableConsulta);
-		if (headerTableConsulta.getColumnModel().getColumnCount() > 0) {
-			headerTableConsulta.getColumnModel().getColumn(2).setResizable(false);
-			headerTableConsulta.getColumnModel().getColumn(2).setPreferredWidth(15);
+
+		buttonVoltar = new JButton("Voltar");
+		buttonVoltar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+					// Volta para a tela anterior
+				}
+			}
+		});
+		buttonVoltar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Volta para a tela anterior
+			}
+		});
+
+		buttonCadastrar = new JButton("Cadastrar");
+		buttonCadastrar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE)
+					cadastrarRegistro();
+			}
+		});
+		buttonCadastrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				cadastrarRegistro();
+			}
+		});
+
+		buttonEditar = new JButton("Editar");
+		buttonEditar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE)
+					editarRegistro();
+			}
+		});
+		buttonEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				editarRegistro();
+			}
+		});
+
+		btnAlterarStatus = new JButton("Alterar Status");
+		btnAlterarStatus.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE)
+					alterarStatusRegistro();
+			}
+		});
+		btnAlterarStatus.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				alterarStatusRegistro();
+			}
+		});
+
+		// Componentes e configuração da Tabela
+		tableConsulta = new javax.swing.JScrollPane();
+
+		tableConsultaModel = new javax.swing.JTable();
+		tableConsultaModel.setModel(
+				new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "Status" }) {
+
+					private static final long serialVersionUID = 1L;
+					Class<?>[] types = new Class[] { java.lang.Integer.class, java.lang.String.class,
+							java.lang.Boolean.class };
+					boolean[] canEdit = new boolean[] { false, false, false };
+
+					public Class<?> getColumnClass(int columnIndex) {
+						return types[columnIndex];
+					}
+
+					public boolean isCellEditable(int rowIndex, int columnIndex) {
+						return canEdit[columnIndex];
+					}
+				});
+		
+		tableConsultaModel.getTableHeader().setReorderingAllowed(false);
+		
+		tableConsulta.setViewportView(tableConsultaModel);
+		if (tableConsultaModel.getColumnModel().getColumnCount() > 0) {
+			tableConsultaModel.getColumnModel().getColumn(2).setResizable(false);
+			tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(15);
 		}
 
-		// Crie um editor de célula personalizado para caixas de seleção
 		DefaultCellEditor checkBoxEditor = new DefaultCellEditor(new JCheckBox());
-		headerTableConsulta.getColumnModel().getColumn(2).setCellEditor(checkBoxEditor);
+		tableConsultaModel.getColumnModel().getColumn(2).setCellEditor(checkBoxEditor);
 
-		// Configure o alinhamento central para o cabeçalho
-		((DefaultTableCellRenderer) headerTableConsulta.getTableHeader().getDefaultRenderer())
+		((DefaultTableCellRenderer) tableConsultaModel.getTableHeader().getDefaultRenderer())
 				.setHorizontalAlignment(SwingConstants.CENTER);
 
-		// Mantenha o renderizador central apenas para as outras colunas, exceto a
-		// coluna "Nome" (segunda coluna)
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-		for (int i = 0; i < headerTableConsulta.getColumnModel().getColumnCount(); i++) {
+		for (int i = 0; i < tableConsultaModel.getColumnModel().getColumnCount(); i++) {
 			if (i == 2) {
-				// Aplique o renderizador personalizado para a primeira e terceira coluna
-				headerTableConsulta.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
-					/**
-					 * 
-					 */
+				tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -123,167 +197,157 @@ public class TelaConsultarEditora extends javax.swing.JFrame {
 					}
 				});
 			} else {
-				// Mantenha o renderizador central para as outras colunas
 				if (i != 1) { // Exceto a coluna "Nome"
-					headerTableConsulta.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+					tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 				}
 			}
 		}
 
-		int novaAlturaDaLinha = headerTableConsulta.getRowHeight() + 2;
-		headerTableConsulta.setRowHeight(novaAlturaDaLinha);
+		int novaAlturaDaLinha = tableConsultaModel.getRowHeight() + 2;
+		tableConsultaModel.setRowHeight(novaAlturaDaLinha);
 
-		// Configure as larguras mínima, máxima e preferida das colunas
-		headerTableConsulta.getColumnModel().getColumn(0).setMinWidth(26);
-		headerTableConsulta.getColumnModel().getColumn(0).setMaxWidth(26);
-		headerTableConsulta.getColumnModel().getColumn(0).setPreferredWidth(26);
+		tableConsultaModel.getColumnModel().getColumn(0).setMinWidth(26);
+		tableConsultaModel.getColumnModel().getColumn(0).setMaxWidth(26);
+		tableConsultaModel.getColumnModel().getColumn(0).setPreferredWidth(26);
 
-		headerTableConsulta.getColumnModel().getColumn(2).setMinWidth(50);
-		headerTableConsulta.getColumnModel().getColumn(2).setMaxWidth(50);
-		headerTableConsulta.getColumnModel().getColumn(2).setPreferredWidth(50);
+		tableConsultaModel.getColumnModel().getColumn(2).setMinWidth(50);
+		tableConsultaModel.getColumnModel().getColumn(2).setMaxWidth(50);
+		tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(50);
 
-		// Adicione bordas laterais
-		headerTableConsulta.setShowGrid(true);
-		headerTableConsulta.setGridColor(Color.LIGHT_GRAY);
+		tableConsultaModel.setShowGrid(true);
+		tableConsultaModel.setGridColor(Color.LIGHT_GRAY);
 
-		// Logica para tornar uma linha selecionável
-
-		JButton buttonVoltar = new JButton("Voltar");
-		buttonVoltar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-
-		JButton buttonCadastrar = new JButton("Cadastrar");
-		buttonCadastrar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				TelaCadastrarEditora telaCadastrarEditora = new TelaCadastrarEditora(TelaConsultarEditora.this);
-				telaCadastrarEditora.setVisible(true);
-			}
-		});
-
-		JButton buttonEditar = new JButton("Editar");
-		buttonEditar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int selectedRows = headerTableConsulta.getSelectedRowCount();
-
-				if (selectedRows <= 0) {
-					JOptionPane.showMessageDialog(null, "Selecione pelo menos um item!");
-				} else if (selectedRows > 1) {
-					JOptionPane.showMessageDialog(null, "Só é possível editar um cadastro por vez!");
-				} else {
-					int selectedRow = headerTableConsulta.getSelectedRow();
-
-					Integer id = (Integer) headerTableConsulta.getModel().getValueAt(selectedRow, 0);
-					String nome = (String) headerTableConsulta.getModel().getValueAt(selectedRow, 1);
-					boolean status = (boolean) headerTableConsulta.getModel().getValueAt(selectedRow, 2);
-
-					telaEditarEditora.setVisible(true);
-					telaEditarEditora.buscarEditora(id, nome, status);
-				}
-			}
-		});
-
-		JButton btnAlterarStatus = new JButton("Alterar Status");
-		btnAlterarStatus.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int[] selectedRows = headerTableConsulta.getSelectedRows();
-
-				if (selectedRows.length < 1) {
-					JOptionPane.showMessageDialog(null, "Selecione pelo menos um registro da tabela!");
-				} else {
-					EditoraController editoraController = new EditoraController();
-
-					int escolha = JOptionPane.showOptionDialog(null, "Qual status deseja definir?",
-							"Alteração de Status", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-							new Object[] { "Desativado", "Ativado" }, "Desativado");
-
-					boolean status = escolha == 1;
-
-					for (int selectedRow : selectedRows) {
-
-						Integer id = (Integer) headerTableConsulta.getModel().getValueAt(selectedRow, 0);
-
-						try {
-							editoraController.atualizarEditora(id, status);
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(null, "Erro: " + ex);
-						} finally {
-							atualizarListaEditoras();
-						}
-					}
-				}
-			}
-		});
-
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(36)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(labelPesquisar)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-								.addComponent(buttonVoltar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addGap(266)
-								.addComponent(buttonCadastrar, GroupLayout.PREFERRED_SIZE, 95,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(buttonEditar, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(btnAlterarStatus, GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
+		// Layout da tela
+				javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+				layout.setHorizontalGroup(
+					layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addGap(36)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-												.addComponent(tableConsulta, GroupLayout.PREFERRED_SIZE, 624,
-														GroupLayout.PREFERRED_SIZE)
-												.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-														.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, 526,
-																GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.UNRELATED)
-														.addComponent(buttonPesquisar)))
-										.addPreferredGap(ComponentPlacement.RELATED))))
-				.addGap(46)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(36).addComponent(labelPesquisar)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
+									.addComponent(buttonVoltar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+									.addGap(266)
+									.addComponent(buttonCadastrar, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(buttonEditar, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnAlterarStatus, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addGroup(layout.createSequentialGroup()
+									.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(tableConsulta, GroupLayout.PREFERRED_SIZE, 624, GroupLayout.PREFERRED_SIZE)
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+											.addGroup(Alignment.LEADING, layout.createSequentialGroup()
+												.addComponent(labelPesquisar)
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(checkboxStatus))
+											.addGroup(Alignment.LEADING, layout.createSequentialGroup()
+												.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, 526, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addComponent(buttonPesquisar))))
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGap(46))
+				);
+				layout.setVerticalGroup(
+					layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addGap(36)
+							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(labelPesquisar)
+								.addComponent(checkboxStatus))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonPesquisar))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tableConsulta, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(11)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(buttonVoltar)
-								.addComponent(btnAlterarStatus).addComponent(buttonEditar)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tableConsulta, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(11)
+							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(buttonVoltar)
+								.addComponent(btnAlterarStatus)
+								.addComponent(buttonEditar)
 								.addComponent(buttonCadastrar))
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		getContentPane().setLayout(layout);
+							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				);
+				getContentPane().setLayout(layout);
 
-		pack();
-	}
-
+				pack();
+			}
+	
 	private void consultarEditora() {
 		String pesquisa = inputPesquisar.getText();
+		boolean status = checkboxStatus.isSelected();
 
-		DefaultTableModel tableModel = (DefaultTableModel) headerTableConsulta.getModel();
+		DefaultTableModel tableModel = (DefaultTableModel) tableConsultaModel.getModel();
 		tableModel.setRowCount(0);
 		EditoraController editoraController = new EditoraController();
 
 		try {
-			ArrayList<Editora> editoras = editoraController.consultarEditoras(pesquisa);
+			ArrayList<Editora> editoras = editoraController.consultarEditoras(pesquisa,status);
 			editoras.forEach((Editora editora) -> {
 				tableModel.addRow(new Object[] { editora.getId(), editora.getNome(), editora.getStatus() });
 			});
 
-			headerTableConsulta.setModel(tableModel);
+			tableConsultaModel.setModel(tableModel);
 		} catch (ExceptionDAO e) {
 			Logger.getLogger(TelaConsultarEditora.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
-
-	void atualizarListaEditoras() {
+	
+	public void atualizarListaEditoras() {
 		consultarEditora();
+	}
+
+	public void cadastrarRegistro() {
+		TelaCadastrarEditora telaCadastrarEditora = new TelaCadastrarEditora(TelaConsultarEditora.this);
+		telaCadastrarEditora.setVisible(true);
+	}
+
+	public void editarRegistro() {
+		int selectedRows = tableConsultaModel.getSelectedRowCount();
+
+		if (selectedRows <= 0) {
+			JOptionPane.showMessageDialog(null, "Selecione pelo menos um item!");
+		} else if (selectedRows > 1) {
+			JOptionPane.showMessageDialog(null, "Só é possível editar um cadastro por vez!");
+		} else {
+			int selectedRow = tableConsultaModel.getSelectedRow();
+
+			Integer id = (Integer) tableConsultaModel.getModel().getValueAt(selectedRow, 0);
+			String nome = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 1);
+			boolean status = (boolean) tableConsultaModel.getModel().getValueAt(selectedRow, 2);
+
+			telaEditarEditora.setVisible(true);
+			telaEditarEditora.buscarEditora(id, nome, status);
+		}
+	}
+
+	public void alterarStatusRegistro() {
+		int[] selectedRows = tableConsultaModel.getSelectedRows();
+
+		if (selectedRows.length < 1) {
+			JOptionPane.showMessageDialog(null, "Selecione pelo menos um registro da tabela!");
+		} else {
+			EditoraController editoraController = new EditoraController();
+
+			int escolha = JOptionPane.showOptionDialog(null, "Qual status deseja definir?", "Alteração de Status",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+					new Object[] { "Desativado", "Ativado" }, "Desativado");
+
+			boolean status = escolha == 1;
+
+			for (int selectedRow : selectedRows) {
+
+				Integer id = (Integer) tableConsultaModel.getModel().getValueAt(selectedRow, 0);
+
+				try {
+					editoraController.atualizarEditora(id, status);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Erro: " + ex);
+				} finally {
+					atualizarListaEditoras();
+				}
+			}
+		}
 	}
 
 	public static void main(String args[]) {

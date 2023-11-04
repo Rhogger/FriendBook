@@ -61,8 +61,8 @@ public class Editora {
 		new EditoraDAO().cadastrarEditora(editora);
 	}
 
-	public ArrayList<Editora> consultar(String pesquisa) throws ExceptionDAO {
-		return new EditoraDAO().listarEditoras(pesquisa);
+	public ArrayList<Editora> consultar(String pesquisa, boolean status) throws ExceptionDAO {
+		return new EditoraDAO().listarEditoras(pesquisa, status);
 	}
 
 	public void editar(Editora editora) throws ExceptionDAO {
