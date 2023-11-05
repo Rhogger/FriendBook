@@ -1,15 +1,12 @@
 package view;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import java.awt.Color;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 
 import view.components.MenuBar;
 
@@ -17,7 +14,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 
 /**
- *
  * @author rhogg
  */
 public class TelaPrincipal extends javax.swing.JFrame {
@@ -25,13 +21,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
 	private JLabel logoApp;
 
 	public TelaPrincipal() {
-		setMaximumSize(new Dimension(900, 680));
 		setMinimumSize(new Dimension(900, 680));
 		setPreferredSize(new Dimension(900, 680));
+		setMaximumSize(new Dimension(900, 680));
 		getContentPane().setBackground(new Color(31, 31, 31));
 		setResizable(false);
 		setSize(new Dimension(900, 680));
-		
+
 		MenuBar menuBar = new MenuBar();
 		JMenuBar jMenuBar = menuBar.initComponents();
 		setJMenuBar(jMenuBar);
@@ -49,20 +45,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
 		logoApp.setIcon(new ImageIcon("assets\\FriendBook-logo.png"));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addGap(352)
-					.addComponent(logoApp, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(352, Short.MAX_VALUE))
-		);
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addGap(230)
-					.addComponent(logoApp, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-					.addGap(230))
-		);
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(352)
+						.addComponent(logoApp, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(352, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(230).addComponent(logoApp, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE).addGap(230)));
 		getContentPane().setLayout(layout);
 
 		pack();

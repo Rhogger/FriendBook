@@ -7,10 +7,10 @@ import model.Autor;
 
 public class AutorController {
 
-	public boolean cadastrarAutor(String nome, boolean status) throws ExceptionDAO {
+	public boolean cadastrarAutor(String nome, String cpf, boolean status) throws ExceptionDAO {
 
-		if (nome != null && nome.length() > 0) {
-			Autor autor = new Autor(nome, status);
+		if (nome != null && nome.length() > 0 && cpf.length() < 12) {
+			Autor autor = new Autor(nome, cpf, status);
 
 			autor.cadastrar(autor);
 
@@ -24,10 +24,10 @@ public class AutorController {
 		return new Autor().consultar(pesquisa, status);
 	}
 
-	public boolean alterarAutor(Integer id, String nome, boolean status) throws ExceptionDAO {
+	public boolean alterarAutor(Integer id, String nome, String cpf, boolean status) throws ExceptionDAO {
 
 		if (nome != null && nome.length() > 0) {
-			Autor autor = new Autor(id, nome, status);
+			Autor autor = new Autor(id, nome, cpf, status);
 
 			autor.editar(autor);
 

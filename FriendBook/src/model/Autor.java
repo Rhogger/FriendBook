@@ -8,6 +8,7 @@ import dao.ExceptionDAO;
 public class Autor {
 	private Integer id;
 	private String nome;
+	private String cpf;
 	private boolean status;
 
 	public Autor() {
@@ -16,9 +17,15 @@ public class Autor {
 	public Autor(Integer id) {
 		this.id = id;
 	}
-	
+
 	public Autor(Integer id, boolean status) {
 		this.id = id;
+		this.status = status;
+	}
+
+	public Autor(String nome, String cpf, boolean status) {
+		this.nome = nome;
+		this.cpf = cpf;
 		this.status = status;
 	}
 
@@ -30,6 +37,13 @@ public class Autor {
 	public Autor(Integer id, String nome, boolean status) {
 		this.id = id;
 		this.nome = nome;
+		this.status = status;
+	}
+
+	public Autor(Integer id, String nome, String cpf, boolean status) {
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
 		this.status = status;
 	}
 
@@ -47,6 +61,14 @@ public class Autor {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public boolean getStatus() {
@@ -78,5 +100,4 @@ public class Autor {
 	public Integer buscarUltimoId() throws ExceptionDAO {
 		return new AutorDAO().buscarUltimoId();
 	}
-
 }
