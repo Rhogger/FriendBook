@@ -16,7 +16,7 @@ public class Editora {
 	public Editora(Integer id) {
 		this.id = id;
 	}
-	
+
 	public Editora(Integer id, boolean status) {
 		this.id = id;
 		this.status = status;
@@ -67,16 +67,17 @@ public class Editora {
 
 	public void editar(Editora editora) throws ExceptionDAO {
 		new EditoraDAO().alterarEditora(editora);
-		;
 	}
 
 	public void alterarStatus(Editora editora) throws ExceptionDAO {
 		new EditoraDAO().AtualizarStatusEditora(editora);
-		;
 	}
 
 	public Integer buscarUltimoId() throws ExceptionDAO {
 		return new EditoraDAO().buscarUltimoId();
 	}
 
+	public String buscarPorId(Integer id) throws ExceptionDAO {
+		return new EditoraDAO().buscarPorId(id);
+	}
 }

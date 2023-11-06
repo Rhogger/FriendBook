@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 
 import view.TelaConsultarAutor;
 import view.TelaConsultarEditora;
+import view.TelaConsultarLivro;
 
 public class MenuBar extends JMenuBar {
 
@@ -56,6 +57,7 @@ public class MenuBar extends JMenuBar {
 		JMenuItem menuItemCadastrosLivros = new JMenuItem("Livros");
 		menuItemCadastrosLivros.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				renderTelaLivros();
 			}
 		});
 		menuItemCadastros.add(menuItemCadastrosLivros);
@@ -107,6 +109,11 @@ public class MenuBar extends JMenuBar {
 	public void renderTelaEditora() {
 		TelaConsultarEditora telaEditora = new TelaConsultarEditora();
 		telaEditora.setVisible(true);
+	}
+	
+	public void renderTelaLivros() {
+		TelaConsultarLivro telaLivro = new TelaConsultarLivro();
+		telaLivro.setVisible(true);
 	}
 
 }

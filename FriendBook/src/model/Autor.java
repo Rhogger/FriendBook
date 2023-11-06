@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import dao.AutorDAO;
+import dao.EditoraDAO;
 import dao.ExceptionDAO;
 
 public class Autor {
@@ -89,15 +90,17 @@ public class Autor {
 
 	public void editar(Autor autor) throws ExceptionDAO {
 		new AutorDAO().alterarAutor(autor);
-		;
 	}
 
 	public void alterarStatus(Autor autor) throws ExceptionDAO {
 		new AutorDAO().AtualizarStatusAutor(autor);
-		;
 	}
 
 	public Integer buscarUltimoId() throws ExceptionDAO {
 		return new AutorDAO().buscarUltimoId();
+	}
+
+	public String buscarPorId(Integer id) throws ExceptionDAO {
+		return new AutorDAO().buscarPorId(id);
 	}
 }

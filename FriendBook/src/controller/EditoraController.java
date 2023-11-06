@@ -53,4 +53,8 @@ public class EditoraController {
 	public Integer buscarUltimoId() throws ExceptionDAO {
 		return new Editora().buscarUltimoId();
 	}
+	
+	public String buscarPorId(Integer id) throws ExceptionDAO {
+		return new Editora().buscarPorId(id);
+	}
 }

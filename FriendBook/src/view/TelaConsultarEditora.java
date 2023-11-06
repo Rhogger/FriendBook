@@ -66,7 +66,7 @@ public class TelaConsultarEditora extends JFrame {
 		setTitle("Editoras");
 
 		// Componentes da tela
-		JLabel labelPesquisar = new JLabel("Informe o nome do Autor");
+		JLabel labelPesquisar = new JLabel("Informe o nome da Editora");
 		labelPesquisar.setForeground(new Color(255, 255, 255));
 		labelPesquisar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 

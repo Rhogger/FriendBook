@@ -44,11 +44,7 @@ public class EditoraDAO {
 	}
 
 	public ArrayList<Editora> listarEditoras(String pesquisa, boolean status) throws ExceptionDAO {
-		String sql = "SELECT * FROM editora WHERE nome like '%" + pesquisa + "%' AND status = true ORDER BY id";
-		
-		if (!status) {
-			sql = "SELECT * FROM editora WHERE nome like '%" + pesquisa + "%' ORDER BY id";
-		}
+		String sql = "SELECT * FROM editora WHERE nome like ? AND status = ? ORDER BY id";
 
 		connection = null;
 		pStatement = null;
@@ -57,7 +53,9 @@ public class EditoraDAO {
 		try {
 			connection = new ConnectionMVC().getConnection();
 			pStatement = connection.prepareStatement(sql);
-			ResultSet rs = pStatement.executeQuery(sql);
+			pStatement.setString(1, "%" + pesquisa + "%");
+			pStatement.setBoolean(2, status);
+			ResultSet rs = pStatement.executeQuery();
 
 			if (rs != null) {
 				editoras = new ArrayList<Editora>();
@@ -94,14 +92,14 @@ public class EditoraDAO {
 	}
 
 	public void alterarEditora(Editora editora) throws ExceptionDAO {
-		Integer id = editora.getId();
-		String nome = editora.getNome();
-		boolean status = editora.getStatus();
-		String sql = "UPDATE editora SET nome = '" + nome + "', status = " + status + " WHERE id = " + id;
+		String sql = "UPDATE editora SET nome = ?, status = ? WHERE id = ?";
 
 		try {
 			connection = new ConnectionMVC().getConnection();
 			pStatement = connection.prepareStatement(sql);
+			pStatement.setString(1, editora.getNome());
+			pStatement.setBoolean(2, editora.getStatus());
+			pStatement.setInt(3, editora.getId());
 			pStatement.execute();
 		} catch (SQLException e) {
 			throw new ExceptionDAO("Erro ao alterar cadastro: " + e);
@@ -125,14 +123,13 @@ public class EditoraDAO {
 	}
 
 	public void AtualizarStatusEditora(Editora editora) throws ExceptionDAO {
-		Integer id = editora.getId();
-		boolean status = editora.getStatus();
-
-		String sql = "UPDATE editora SET status = " + status + " WHERE id = " + id;
+		String sql = "UPDATE editora SET status = ? WHERE id = ?";
 
 		try {
 			connection = new ConnectionMVC().getConnection();
 			pStatement = connection.prepareStatement(sql);
+			pStatement.setBoolean(1, editora.getStatus());
+			pStatement.setInt(2, editora.getId());
 			pStatement.execute();
 		} catch (SQLException e) {
 			throw new ExceptionDAO("Erro ao atualizar status da editora: " + e);
@@ -196,5 +193,50 @@ public class EditoraDAO {
 		}
 
 		return id;
+	}
+
+	public String buscarPorId(Integer id) throws ExceptionDAO {
+		String sql = "SELECT nome FROM editora WHERE id = ?";
+
+		connection = null;
+		pStatement = null;
+
+		String nome = "Sem nome";
+
+		try {
+			connection = new ConnectionMVC().getConnection();
+			pStatement = connection.prepareStatement(sql);
+			pStatement.setInt(1, id);
+			ResultSet rs = pStatement.executeQuery(sql);
+
+			if (rs != null) {
+				if (rs.next() == false) {
+					return nome;
+				}
+
+				nome = rs.getString("nome");
+			}
+
+		} catch (SQLException e) {
+			throw new ExceptionDAO("Erro ao consultar editora!" + e);
+		} finally {
+			try {
+				if (pStatement != null) {
+					pStatement.close();
+				}
+			} catch (SQLException e) {
+				throw new ExceptionDAO("Erro ao fechar o Statement: " + e);
+			}
+
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				throw new ExceptionDAO("Erro ao fechar a conexão: " + e);
+			}
+		}
+
+		return nome;
 	}
 }

@@ -1,8 +1,8 @@
 package view;
 
-import model.Autor;
+import model.Livro;
 import dao.ExceptionDAO;
-import controller.AutorController;
+import controller.LivroController;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -31,21 +31,22 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * Tela de consulta de Autores
+ * Tela de consulta de Livros
  *
  * @author rhogg
  */
-public class TelaConsultarAutor extends JFrame {
+public class TelaConsultarLivro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField inputPesquisar;
 	private JCheckBox checkboxStatus;
+	private JCheckBox checkboxDisponibilidade;
 
 	private JScrollPane tableConsulta;
 	private JTable tableConsultaModel;
-	private TelaFormAutor telaEditarAutor = new TelaFormAutor(this, "Editar");
+	private TelaFormLivro telaEditarLivro;
 
-	public TelaConsultarAutor() {
+	public TelaConsultarLivro() {
 		setMinimumSize(new Dimension(900, 680));
 		setPreferredSize(new Dimension(900, 680));
 		setMaximumSize(new Dimension(900, 680));
@@ -54,18 +55,18 @@ public class TelaConsultarAutor extends JFrame {
 		initComponents();
 	}
 
-	public TelaConsultarAutor(TelaFormAutor telaEditarAutor) {
-		this.telaEditarAutor = telaEditarAutor;
+	public TelaConsultarLivro(TelaFormLivro telaEditarLivro) {
+		this.telaEditarLivro = telaEditarLivro;
 		initComponents();
 	}
 
 	private void initComponents() {
 		// Propriedades da tela
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("Autores");
+		setTitle("Livros");
 
 		// Componentes da tela
-		JLabel labelPesquisar = new JLabel("Informe o nome do Autor");
+		JLabel labelPesquisar = new JLabel("Informe o título do Livro");
 		labelPesquisar.setForeground(new Color(255, 255, 255));
 		labelPesquisar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
@@ -85,6 +86,12 @@ public class TelaConsultarAutor extends JFrame {
 		checkboxStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		checkboxStatus.setSelected(true);
 
+		checkboxDisponibilidade = new JCheckBox("Disponível");
+		checkboxDisponibilidade.setSelected(true);
+		checkboxDisponibilidade.setForeground(Color.WHITE);
+		checkboxDisponibilidade.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		checkboxDisponibilidade.setBackground(new Color(31, 31, 31));
+
 		// Botões e eventos
 		JButton buttonPesquisar = new JButton("Pesquisar");
 		buttonPesquisar.setForeground(new Color(255, 255, 255));
@@ -92,7 +99,7 @@ public class TelaConsultarAutor extends JFrame {
 		buttonPesquisar.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		buttonPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				consultarAutor();
+				consultarLivro();
 			}
 		});
 
@@ -144,10 +151,11 @@ public class TelaConsultarAutor extends JFrame {
 		tableConsultaModel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		tableConsultaModel.setForeground(new Color(0, 0, 0));
 		tableConsultaModel.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {},
-				new String[] { "ID", "Nome", "CPF", "Status" }) {
+				new String[] { "ID", "Título", "Editora", "Autor", "Disponível", "Status" }) {
 			private static final long serialVersionUID = 1L;
-			Class<?>[] types = new Class[] { Integer.class, String.class, String.class, Boolean.class };
-			boolean[] canEdit = new boolean[] { false, false, false, false };
+			Class<?>[] types = new Class[] { Integer.class, String.class, String.class, String.class, Boolean.class,
+					Boolean.class };
+			boolean[] canEdit = new boolean[] { false, false, false, false, false, false };
 
 			public Class<?> getColumnClass(int columnIndex) {
 				return types[columnIndex];
@@ -163,7 +171,7 @@ public class TelaConsultarAutor extends JFrame {
 		tableConsulta.setViewportView(tableConsultaModel);
 
 		DefaultCellEditor checkBoxEditor = new DefaultCellEditor(new JCheckBox());
-		tableConsultaModel.getColumnModel().getColumn(3).setCellEditor(checkBoxEditor);
+		tableConsultaModel.getColumnModel().getColumn(5).setCellEditor(checkBoxEditor);
 
 		((DefaultTableCellRenderer) tableConsultaModel.getTableHeader().getDefaultRenderer())
 				.setHorizontalAlignment(SwingConstants.CENTER);
@@ -173,7 +181,7 @@ public class TelaConsultarAutor extends JFrame {
 
 		for (int i = 0; i < tableConsultaModel.getColumnModel().getColumnCount(); i++) {
 
-			if (i != 3 && i != 1) {
+			if (i != 5 && i != 1 && i != 4) {
 				tableConsultaModel.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 			}
 		}
@@ -186,88 +194,101 @@ public class TelaConsultarAutor extends JFrame {
 		tableConsultaModel.getColumnModel().getColumn(0).setPreferredWidth(26);
 		tableConsultaModel.getColumnModel().getColumn(0).setResizable(false);
 
-		tableConsultaModel.getColumnModel().getColumn(2).setMinWidth(150);
-		tableConsultaModel.getColumnModel().getColumn(2).setMaxWidth(150);
-		tableConsultaModel.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tableConsultaModel.getColumnModel().getColumn(2).setResizable(false);
+		tableConsultaModel.getColumnModel().getColumn(4).setMinWidth(75);
+		tableConsultaModel.getColumnModel().getColumn(4).setMaxWidth(75);
+		tableConsultaModel.getColumnModel().getColumn(4).setPreferredWidth(75);
+		tableConsultaModel.getColumnModel().getColumn(4).setResizable(false);
 
-		tableConsultaModel.getColumnModel().getColumn(3).setMinWidth(50);
-		tableConsultaModel.getColumnModel().getColumn(3).setMaxWidth(50);
-		tableConsultaModel.getColumnModel().getColumn(3).setPreferredWidth(50);
-		tableConsultaModel.getColumnModel().getColumn(3).setResizable(false);
+		tableConsultaModel.getColumnModel().getColumn(5).setMinWidth(50);
+		tableConsultaModel.getColumnModel().getColumn(5).setMaxWidth(50);
+		tableConsultaModel.getColumnModel().getColumn(5).setPreferredWidth(50);
+		tableConsultaModel.getColumnModel().getColumn(5).setResizable(false);
 
 		tableConsultaModel.setShowGrid(true);
 		tableConsultaModel.setGridColor(Color.LIGHT_GRAY);
 
 		// Layout da tela
 		GroupLayout layout = new GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addGap(41)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(tableConsulta, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 802, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(labelPesquisar)
-										.addComponent(inputPesquisar, GroupLayout.DEFAULT_SIZE, 707, Short.MAX_VALUE))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(buttonPesquisar)
-										.addComponent(checkboxStatus)))
-						.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-								.addComponent(buttonVoltar, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addGap(420)
-								.addComponent(buttonCadastrar, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(buttonEditar, GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnAlterarStatus)))
-				.addGap(41)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(36)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(labelPesquisar)
-						.addComponent(checkboxStatus))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(buttonPesquisar))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(tableConsulta, GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE).addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(buttonVoltar)
-						.addComponent(btnAlterarStatus).addComponent(buttonEditar).addComponent(buttonCadastrar))
-				.addGap(24)));
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup().addGap(41)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(tableConsulta, GroupLayout.DEFAULT_SIZE, 802, Short.MAX_VALUE)
+										.addGroup(layout.createSequentialGroup().addComponent(labelPesquisar)
+												.addGap(18, 533, Short.MAX_VALUE).addComponent(checkboxDisponibilidade)
+												.addGap(6).addComponent(checkboxStatus))
+										.addGroup(
+												layout.createSequentialGroup()
+														.addComponent(buttonVoltar, GroupLayout.PREFERRED_SIZE, 65,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(420)
+														.addComponent(buttonCadastrar, GroupLayout.DEFAULT_SIZE, 94,
+																Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.UNRELATED)
+														.addComponent(buttonEditar, GroupLayout.DEFAULT_SIZE, 94,
+																Short.MAX_VALUE)
+														.addPreferredGap(ComponentPlacement.UNRELATED)
+														.addComponent(btnAlterarStatus))
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(inputPesquisar, GroupLayout.DEFAULT_SIZE, 699,
+														Short.MAX_VALUE)
+												.addGap(18).addComponent(buttonPesquisar)))
+								.addGap(41)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(36)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(labelPesquisar)
+								.addComponent(checkboxStatus).addComponent(checkboxDisponibilidade,
+										GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(inputPesquisar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonPesquisar))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tableConsulta, GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE).addGap(18)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(buttonVoltar)
+								.addComponent(btnAlterarStatus).addComponent(buttonEditar)
+								.addComponent(buttonCadastrar))
+						.addGap(24)));
 		getContentPane().setLayout(layout);
 
 		pack();
 	}
 
-	private void consultarAutor() {
+	private void consultarLivro() {
 		String pesquisa = inputPesquisar.getText();
 		boolean status = checkboxStatus.isSelected();
+		boolean disponibilidade = checkboxDisponibilidade.isSelected();
 
 		DefaultTableModel tableModel = (DefaultTableModel) tableConsultaModel.getModel();
 		tableModel.setRowCount(0);
-		AutorController autorController = new AutorController();
+		LivroController livroController = new LivroController();
 
 		try {
-			ArrayList<Autor> autores = autorController.consultarAutores(pesquisa, status);
-			autores.forEach((Autor autor) -> {
-				tableModel.addRow(new Object[] { autor.getId(), autor.getNome(), autor.getCpf(), autor.getStatus() });
+			ArrayList<Livro> livros = livroController.consultarLivros(pesquisa, status, disponibilidade);
+			livros.forEach((Livro livro) -> {
+				tableModel.addRow(new Object[] { livro.getId(), livro.getTitulo(), livro.getNomeEditora(),
+						livro.getNomeAutor(), livro.getDisponibilidade(), livro.getStatus() });
 			});
 
 			tableConsultaModel.setModel(tableModel);
 		} catch (ExceptionDAO e) {
-			Logger.getLogger(TelaConsultarAutor.class.getName()).log(Level.SEVERE, null, e);
+			Logger.getLogger(TelaConsultarLivro.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
 
-	public void atualizarListaAutores() {
-		consultarAutor();
+	public void atualizarListaLivros() {
+		consultarLivro();
 	}
 
 	public void cadastrarRegistro() {
-		TelaFormAutor telaCadastrarAutor = new TelaFormAutor(TelaConsultarAutor.this, "Cadastrar");
-		telaCadastrarAutor.setVisible(true);
+		TelaFormLivro telaCadastrarLivro = new TelaFormLivro(TelaConsultarLivro.this, "Cadastrar");
+		telaCadastrarLivro.setVisible(true);
 	}
 
 	public void editarRegistro() {
+		telaEditarLivro = new TelaFormLivro(this, "Editar");
+		
 		int selectedRows = tableConsultaModel.getSelectedRowCount();
 
 		if (selectedRows <= 0) {
@@ -278,12 +299,15 @@ public class TelaConsultarAutor extends JFrame {
 			int selectedRow = tableConsultaModel.getSelectedRow();
 
 			Integer id = (Integer) tableConsultaModel.getModel().getValueAt(selectedRow, 0);
-			String nome = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 1);
-			String cpf = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 2);
-			boolean status = (boolean) tableConsultaModel.getModel().getValueAt(selectedRow, 3);
+			String titulo = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 1);
+			String genero = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 2);
+			String nomeEditora = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 3);
+			String nomeAutor = (String) tableConsultaModel.getModel().getValueAt(selectedRow, 4);
+			boolean disponibilidade = (boolean) tableConsultaModel.getModel().getValueAt(selectedRow, 5);
+			boolean status = (boolean) tableConsultaModel.getModel().getValueAt(selectedRow, 6);
 
-			telaEditarAutor.setVisible(true);
-			telaEditarAutor.buscarAutor(id, nome, cpf, status);
+			telaEditarLivro.setVisible(true);
+			telaEditarLivro.buscarLivro(id, titulo, genero, status, nomeEditora, nomeAutor, disponibilidade);
 		}
 	}
 
@@ -293,7 +317,7 @@ public class TelaConsultarAutor extends JFrame {
 		if (selectedRows.length < 1) {
 			JOptionPane.showMessageDialog(null, "Selecione pelo menos um registro da tabela!");
 		} else {
-			AutorController autorController = new AutorController();
+			LivroController livroController = new LivroController();
 
 			int escolha = JOptionPane.showOptionDialog(null, "Qual status deseja definir?", "Alteração de Status",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
@@ -306,11 +330,11 @@ public class TelaConsultarAutor extends JFrame {
 				Integer id = (Integer) tableConsultaModel.getModel().getValueAt(selectedRow, 0);
 
 				try {
-					autorController.atualizarAutor(id, status);
+					livroController.atualizarStatusLivro(id, status);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Erro: " + ex);
 				} finally {
-					atualizarListaAutores();
+					atualizarListaLivros();
 				}
 			}
 		}

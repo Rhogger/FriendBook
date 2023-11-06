@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import dao.ExceptionDAO;
 import model.Autor;
+import model.Editora;
 
 public class AutorController {
 
@@ -52,5 +53,9 @@ public class AutorController {
 
 	public Integer buscarUltimoId() throws ExceptionDAO {
 		return new Autor().buscarUltimoId();
+	}
+	
+	public String buscarPorId(Integer id) throws ExceptionDAO {
+		return new Autor().buscarPorId(id);
 	}
 }

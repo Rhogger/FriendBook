@@ -49,12 +49,12 @@ public class TelaFormEditora extends JFrame {
 
 	private void initComponents() {
 		// Propriedades da tela
-		setTitle(this.title + " Autor");
+		setTitle(this.title + " Editora");
 		setResizable(false);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		// Componentes da tela
-		JLabel labelTitulo = new JLabel(this.title + " Autor");
+		JLabel labelTitulo = new JLabel(this.title + " Editoras");
 		labelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		labelTitulo.setForeground(new Color(255, 255, 255));
 
@@ -122,44 +122,7 @@ public class TelaFormEditora extends JFrame {
 		buttonFormAction.setMaximumSize(new Dimension(80, 36));
 		buttonFormAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nome = inputNome.getText();
-				boolean status = checkboxStatus.isSelected();
-				boolean sucesso = false;
-
-				if (title == "Cadastrar") {
-					try {
-						sucesso = editoraController.cadastrarEditora(nome, status);
-
-						if (sucesso == true) {
-							telaConsultarEditora.atualizarListaEditoras();
-							JOptionPane.showMessageDialog(null, "Editora cadastrada com sucesso.");
-						} else {
-							JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
-						}
-
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Erro: " + ex);
-					} finally {
-						dispose();
-					}
-				} else if (title == "Editar") {
-					try {
-						sucesso = editoraController.alterarEditora(idEditora, nome, status);
-
-						if (sucesso == true) {
-							telaConsultarEditora.atualizarListaEditoras();
-							JOptionPane.showMessageDialog(null, "Cadastro editado com sucesso.");
-						} else {
-							JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
-						}
-
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Erro: " + ex);
-					} finally {
-						if(sucesso)
-						dispose();
-					}
-				}
+				formAction();
 			}
 		});
 
@@ -203,6 +166,48 @@ public class TelaFormEditora extends JFrame {
 		getContentPane().setLayout(layout);
 
 		pack();
+	}
+	
+	public void formAction() {
+		String nome = inputNome.getText();
+		boolean status = checkboxStatus.isSelected();
+		boolean sucesso = false;
+
+		if (title == "Cadastrar") {
+			try {
+				sucesso = editoraController.cadastrarEditora(nome, status);
+
+				if (sucesso == true) {
+					telaConsultarEditora.atualizarListaEditoras();
+					JOptionPane.showMessageDialog(null, "Editora cadastrada com sucesso.");
+				} else {
+					JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
+				}
+
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Erro: " + ex);
+			} finally {
+				if(sucesso)
+				dispose();
+			}
+		} else if (title == "Editar") {
+			try {
+				sucesso = editoraController.alterarEditora(idEditora, nome, status);
+
+				if (sucesso == true) {
+					telaConsultarEditora.atualizarListaEditoras();
+					JOptionPane.showMessageDialog(null, "Cadastro editado com sucesso.");
+				} else {
+					JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
+				}
+
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Erro: " + ex);
+			} finally {
+				if(sucesso)
+				dispose();
+			}
+		}
 	}
 
 	public String buscarUltimoId() {

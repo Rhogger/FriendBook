@@ -135,45 +135,7 @@ public class TelaFormAutor extends JFrame {
 		buttonFormAction.setMaximumSize(new Dimension(80, 36));
 		buttonFormAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nome = inputNome.getText();
-				String cpf = inputCpf.getText();
-				boolean status = checkboxStatus.isSelected();
-				boolean sucesso = false;
-
-				if (title == "Cadastrar") {
-					try {
-						sucesso = autorController.cadastrarAutor(nome,cpf, status);
-
-						if (sucesso == true) {
-							telaConsultarAutor.atualizarListaAutores();
-							JOptionPane.showMessageDialog(null, "Autor(a) cadastrado(a) com sucesso.");
-						} else {
-							JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
-						}
-
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Erro: " + ex);
-					} finally {
-						if(sucesso)
-						dispose();
-					}
-				} else if (title == "Editar") {
-					try {
-						sucesso = autorController.alterarAutor(idAutor, nome, cpf, status);
-
-						if (sucesso == true) {
-							telaConsultarAutor.atualizarListaAutores();
-							JOptionPane.showMessageDialog(null, "Cadastro editado com sucesso.");
-						} else {
-							JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
-						}
-
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Erro: " + ex);
-					} finally {
-						dispose();
-					}
-				}
+				formAction();
 			}
 		});
 
@@ -226,6 +188,49 @@ public class TelaFormAutor extends JFrame {
 		getContentPane().setLayout(layout);
 
 		pack();
+	}
+	
+	public void formAction() {
+		String nome = inputNome.getText();
+		String cpf = inputCpf.getText();
+		boolean status = checkboxStatus.isSelected();
+		boolean sucesso = false;
+
+		if (title == "Cadastrar") {
+			try {
+				sucesso = autorController.cadastrarAutor(nome,cpf, status);
+
+				if (sucesso == true) {
+					telaConsultarAutor.atualizarListaAutores();
+					JOptionPane.showMessageDialog(null, "Autor(a) cadastrado(a) com sucesso.");
+				} else {
+					JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
+				}
+
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Erro: " + ex);
+			} finally {
+				if(sucesso)
+				dispose();
+			}
+		} else if (title == "Editar") {
+			try {
+				sucesso = autorController.alterarAutor(idAutor, nome, cpf, status);
+
+				if (sucesso == true) {
+					telaConsultarAutor.atualizarListaAutores();
+					JOptionPane.showMessageDialog(null, "Cadastro editado com sucesso.");
+				} else {
+					JOptionPane.showMessageDialog(null, "Os campos não foram preenchidos corretamente!");
+				}
+
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Erro: " + ex);
+			} finally {
+				if(sucesso)
+				dispose();
+			}
+		}
 	}
 
 	public void buscarAutor(Integer id, String nome,String cpf, boolean status) {
